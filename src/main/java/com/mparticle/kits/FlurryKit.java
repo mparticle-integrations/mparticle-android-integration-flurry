@@ -97,6 +97,23 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
     }
 
     @Override
+    public void setUserAttributeList(String s, List<String> list) {
+
+    }
+
+    @Override
+    public boolean supportsAttributeLists() {
+        return false;
+    }
+
+    @Override
+    public void setAllUserAttributes(Map<String, String> attributes, Map<String, List<String>> attributeLists) {
+        for (Map.Entry<String, String> entry : attributes.entrySet()){
+            setUserAttribute(entry.getKey(), entry.getValue());
+        }
+    }
+
+    @Override
     public void removeUserAttribute(String key) {
         //there's no way to un-set age/gender
     }
