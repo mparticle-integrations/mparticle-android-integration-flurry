@@ -11,5 +11,5 @@ buildscript {
 apply plugin: 'com.mparticle.kit'
 
 dependencies {
-    compile 'com.flurry.android:analytics:7.2.3'
+    api 'com.flurry.android:analytics:7.2.3'
 }
