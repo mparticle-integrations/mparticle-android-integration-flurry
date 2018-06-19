@@ -10,12 +10,14 @@ import com.flurry.android.FlurryAgent;
 import com.flurry.android.FlurryInstallReceiver;
 import com.mparticle.MPEvent;
 import com.mparticle.MParticle;
+import com.mparticle.kits_core.KitIntegration;
+import com.mparticle.kits_core.ReportingMessage;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class FlurryKit extends KitIntegration implements KitIntegration.AttributeListener, KitIntegration.EventListener {
+public class FlurryKit extends AbstractKitIntegration implements KitIntegration.AttributeListener, KitIntegration.EventListener {
     private static final String API_KEY = "apiKey";
     private static final String HASH_ID = "hashCustomerId";
     private static final String CAPTURE_EXCEPTIONS = "captureExceptions";
@@ -28,7 +30,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
     }
 
     @Override
-    protected List<ReportingMessage> onKitCreate(Map<String, String> settings, Context context) {
+    public List<ReportingMessage> onKitCreate(Map<String, String> settings, Context context) {
         boolean logEnabled = false;
         if (MParticle.getInstance().getEnvironment().equals(MParticle.Environment.Development)) {
             logEnabled = true;
@@ -140,7 +142,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
             FlurryAgent.logEvent(event.getEventName(), event.getInfo());
         }
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
-        messageList.add(ReportingMessage.fromEvent(this,event));
+        messageList.add(ReportingMessageImpl.fromEvent(this,event));
         return messageList;
     }
 
@@ -149,7 +151,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
         FlurryAgent.onPageView();
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
         messageList.add(
-                new ReportingMessage(this, ReportingMessage.MessageType.SCREEN_VIEW, System.currentTimeMillis(), eventAttributes)
+                new ReportingMessageImpl(this, ReportingMessageImpl.MessageType.SCREEN_VIEW, System.currentTimeMillis(), eventAttributes)
                         .setScreenName(screenName)
         );
         return messageList;
@@ -160,7 +162,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
         FlurryAgent.setLogEvents(!optOutStatus);
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
         messageList.add(
-                new ReportingMessage(this, ReportingMessage.MessageType.OPT_OUT, System.currentTimeMillis(), null)
+                new ReportingMessageImpl(this, ReportingMessageImpl.MessageType.OPT_OUT, System.currentTimeMillis(), null)
                         .setOptOut(optOutStatus)
         );
         return messageList;
