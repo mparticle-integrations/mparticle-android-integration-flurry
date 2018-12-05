@@ -5,7 +5,7 @@
 -dontwarn com.flurry.**
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keepclasseswithmembers class * {
-   public (android.content.Context, android.util.AttributeSet, int);
+  public <init>(android.content.Context, android.util.AttributeSet, int);
  }
 
  # Google Play Services library
