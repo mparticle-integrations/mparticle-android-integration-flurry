@@ -11,6 +11,12 @@ buildscript {
 
 apply plugin: 'com.mparticle.kit'
 
+android {
+    defaultConfig {
+        minSdkVersion 16
+    }
+}
+
 dependencies {
-    api 'com.flurry.android:analytics:7.2.3'
+    api 'com.flurry.android:analytics:11.6.0'
 }

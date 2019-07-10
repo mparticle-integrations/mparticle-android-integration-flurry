@@ -2,7 +2,6 @@ package com.mparticle.kits;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 
 import com.flurry.android.Constants;
@@ -20,7 +19,6 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
     private static final String HASH_ID = "hashCustomerId";
     private static final String CAPTURE_EXCEPTIONS = "captureExceptions";
     private static final String INCLUDE_LOCATION = "includeLocation";
-    private boolean includeLocation = true;
 
     @Override
     public String getName() {
@@ -33,9 +31,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
         if (MParticle.getInstance().getEnvironment().equals(MParticle.Environment.Development)) {
             logEnabled = true;
         }
-        if (getSettings().containsKey(INCLUDE_LOCATION) && !Boolean.parseBoolean(getSettings().get(INCLUDE_LOCATION))) {
-            includeLocation = false;
-        }
+        FlurryAgent.setReportLocation(getSettings().containsKey(INCLUDE_LOCATION) && !Boolean.parseBoolean(getSettings().get(INCLUDE_LOCATION)));
 
         new FlurryAgent.Builder()
                 .withLogEnabled(logEnabled)
@@ -49,13 +45,6 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
     @Override
     public void setInstallReferrer(Intent intent) {
         new FlurryInstallReceiver().onReceive(getContext(), intent);
-    }
-
-    @Override
-    public void setLocation(Location location) {
-        if (includeLocation) {
-            FlurryAgent.setLocation((float) location.getLatitude(), (float) location.getLongitude());
-        }
     }
 
     @Override
