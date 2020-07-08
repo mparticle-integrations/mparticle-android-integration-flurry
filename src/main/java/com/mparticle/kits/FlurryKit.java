@@ -123,10 +123,10 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
 
     @Override
     public List<ReportingMessage> logEvent(MPEvent event) {
-        if (event.getInfo() == null) {
+        if (event.getCustomAttributes() == null) {
             FlurryAgent.logEvent(event.getEventName());
         }else{
-            FlurryAgent.logEvent(event.getEventName(), event.getInfo());
+            FlurryAgent.logEvent(event.getEventName(), event.getCustomAttributes());
         }
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
         messageList.add(ReportingMessage.fromEvent(this,event));
@@ -135,7 +135,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
 
     @Override
     public List<ReportingMessage> logScreen(String screenName, Map<String, String> eventAttributes) {
-        FlurryAgent.onPageView();
+        FlurryAgent.logEvent(screenName, eventAttributes);
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
         messageList.add(
                 new ReportingMessage(this, ReportingMessage.MessageType.SCREEN_VIEW, System.currentTimeMillis(), eventAttributes)
@@ -146,12 +146,6 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
 
     @Override
     public List<ReportingMessage> setOptOut(boolean optOutStatus) {
-        FlurryAgent.setLogEvents(!optOutStatus);
-        List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
-        messageList.add(
-                new ReportingMessage(this, ReportingMessage.MessageType.OPT_OUT, System.currentTimeMillis(), null)
-                        .setOptOut(optOutStatus)
-        );
-        return messageList;
+        return null;
     }
 }
