@@ -8,7 +8,7 @@ This repository contains the [Flurry](https://developer.yahoo.com/analytics/) in
 
     ```groovy
     dependencies {
-        compile 'com.mparticle:android-flurry-kit:5+'
+        implementation 'com.mparticle:android-flurry-kit:5+'
     }
     ```
 2. Follow the mParticle Android SDK [quick-start](https://github.com/mParticle/mparticle-android-sdk), then rebuild and launch your app, and verify that you see `"Flurry detected"` in the output of `adb logcat`.
