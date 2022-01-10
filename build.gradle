@@ -23,5 +23,5 @@ android {
 }
 
 dependencies {
-    api 'com.flurry.android:analytics:13.1.0'
+    api 'com.flurry.android:analytics:13.0.1'
 }
