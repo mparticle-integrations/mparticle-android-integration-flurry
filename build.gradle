@@ -20,6 +20,9 @@ android {
     defaultConfig {
         minSdkVersion 16
     }
+    lintOptions {
+        disable "FlurryVersionMismatch"
+    }
 }
 
 dependencies {
