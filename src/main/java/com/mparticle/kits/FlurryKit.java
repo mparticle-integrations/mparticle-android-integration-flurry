@@ -126,7 +126,7 @@ public class FlurryKit extends KitIntegration implements KitIntegration.Attribut
         if (event.getCustomAttributes() == null) {
             FlurryAgent.logEvent(event.getEventName());
         }else{
-            FlurryAgent.logEvent(event.getEventName(), event.getCustomAttributes());
+            FlurryAgent.logEvent(event.getEventName(), event.getCustomAttributeStrings());
         }
         List<ReportingMessage> messageList = new LinkedList<ReportingMessage>();
         messageList.add(ReportingMessage.fromEvent(this,event));
