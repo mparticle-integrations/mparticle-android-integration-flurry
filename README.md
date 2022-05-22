@@ -16,7 +16,7 @@ This repository contains the [Flurry](https://developer.yahoo.com/analytics/) in
 
 ### Documentation
 
-[Flurry integration](http://docs.mparticle.com/?java#flurry)
+[Flurry integration](https://docs.mparticle.com/integrations/flurry/event/)
 
 ### License
 
