@@ -10,24 +10,29 @@ import com.mparticle.MPEvent
 import com.mparticle.MParticle
 import com.mparticle.MParticle.IdentityType
 import com.mparticle.kits.KitIntegration.AttributeListener
-import java.util.*
+import java.util.LinkedList
+import java.util.Locale
 
-class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListener {
+class FlurryKit :
+    KitIntegration(),
+    AttributeListener,
+    KitIntegration.EventListener {
     override fun getName(): String = KIT_NAME
 
     override fun onKitCreate(
         settings: Map<String, String>,
-        context: Context
+        context: Context,
     ): List<ReportingMessage> {
         var logEnabled = false
         if (MParticle.getInstance()?.environment == MParticle.Environment.Development) {
             logEnabled = true
         }
         FlurryAgent.setReportLocation(
-            getSettings().containsKey(INCLUDE_LOCATION) && !getSettings()[INCLUDE_LOCATION].toBoolean()
+            getSettings().containsKey(INCLUDE_LOCATION) && !getSettings()[INCLUDE_LOCATION].toBoolean(),
         )
         getSettings()[API_KEY]?.let {
-            FlurryAgent.Builder()
+            FlurryAgent
+                .Builder()
                 .withLogEnabled(logEnabled)
                 .withLogLevel(Log.VERBOSE)
                 .withCaptureUncaughtExceptions(getSettings()[CAPTURE_EXCEPTIONS].toBoolean())
@@ -40,7 +45,10 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
         FlurryInstallReceiver().onReceive(context, intent)
     }
 
-    override fun setUserIdentity(identityType: IdentityType, idIn: String) {
+    override fun setUserIdentity(
+        identityType: IdentityType,
+        idIn: String,
+    ) {
         var id = idIn
         if (identityType == IdentityType.CustomerId) {
             if (!settings.containsKey(HASH_ID) || settings[HASH_ID].toBoolean()) {
@@ -58,7 +66,10 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
 
     override fun logout(): List<ReportingMessage> = emptyList()
 
-    override fun setUserAttribute(key: String, value: String) {
+    override fun setUserAttribute(
+        key: String,
+        value: String,
+    ) {
         if (key == MParticle.UserAttributes.AGE) {
             try {
                 FlurryAgent.setAge(value.toInt())
@@ -71,12 +82,16 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
         }
     }
 
-    override fun setUserAttributeList(s: String, list: List<String>) {}
+    override fun setUserAttributeList(
+        s: String,
+        list: List<String>,
+    ) {}
+
     override fun supportsAttributeLists(): Boolean = false
 
     override fun setAllUserAttributes(
         attributes: Map<String, String>,
-        attributeLists: Map<String, List<String>>
+        attributeLists: Map<String, List<String>>,
     ) {
         for ((key, value) in attributes) {
             setUserAttribute(key, value)
@@ -84,20 +99,20 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
     }
 
     override fun removeUserAttribute(key: String) {
-        //there's no way to un-set age/gender
+        // there's no way to un-set age/gender
     }
 
     override fun leaveBreadcrumb(breadcrumb: String): List<ReportingMessage> = emptyList()
 
     override fun logError(
         message: String,
-        errorAttributes: Map<String, String>
+        errorAttributes: Map<String, String>,
     ): List<ReportingMessage> = emptyList()
 
     override fun logException(
         exception: Exception,
         exceptionAttributes: Map<String, String>,
-        message: String
+        message: String,
     ): List<ReportingMessage> = emptyList()
 
     override fun logEvent(event: MPEvent): List<ReportingMessage> {
@@ -113,7 +128,7 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
 
     override fun logScreen(
         screenName: String,
-        eventAttributes: Map<String, String>
+        eventAttributes: Map<String, String>,
     ): List<ReportingMessage> {
         FlurryAgent.logEvent(screenName, eventAttributes)
         val messageList = LinkedList<ReportingMessage>()
@@ -122,9 +137,8 @@ class FlurryKit : KitIntegration(), AttributeListener, KitIntegration.EventListe
                 this,
                 ReportingMessage.MessageType.SCREEN_VIEW,
                 System.currentTimeMillis(),
-                eventAttributes
-            )
-                .setScreenName(screenName)
+                eventAttributes,
+            ).setScreenName(screenName),
         )
         return messageList
     }
